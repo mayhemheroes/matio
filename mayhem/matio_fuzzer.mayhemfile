@@ -1,0 +1,4 @@
+project: PROJECT
+target: matio_fuzzer
+cmds:
+- cmd: /out/matio_fuzzer
