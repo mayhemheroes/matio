@@ -1,0 +1,15 @@
+project: matio
+# Target name kept from the old fork integration (mayhem/matio_fuzzer.mayhemfile) for Mayhem-history
+# parity. This is matio's OSS-Fuzz libFuzzer harness (ossfuzz/matio_fuzzer.cpp): it writes the fuzz
+# bytes to a temp file, Mat_Open()s it as a MATLAB .mat file and walks every variable —
+# Mat_VarReadNextInfo -> Mat_VarReadDataAll -> Mat_VarPrint -> Mat_VarDuplicate -> Mat_VarFree.
+# The fuzzed surface is the whole .mat parser: MAT4 (mat4.c), MAT5 (mat5.c, incl. zlib-compressed)
+# and MAT7.3/HDF5 (mat73.c). Seeds in mayhem/testsuite cover MAT4/MAT5/MAT5-v6/MAT7.3 formats.
+# Sanitizer findings in any parser SIGABRT and are recorded as crashes.
+target: matio_fuzzer
+cmds:
+  - cmd: /mayhem/matio_fuzzer
+    libfuzzer: true
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/matio_fuzzer/testsuite
